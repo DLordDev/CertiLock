@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Set the page name, phone layout, and welcome-page styles. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to CertiLock</title>
+  <link rel="stylesheet" href="Welcome.css">
+</head>
+<body>
+  <!-- This card greets the signed-in person before they continue. -->
+  <main class="welcome-card" aria-live="polite">
+    <img class="brand-logo" src="image/certilock logo.jpeg" alt="CertiLock — certificate security and verification">
+    <p class="eyebrow">LOGIN SUCCESSFUL</p>
+    <h1 id="welcome-message">Welcome to CertiLock</h1>
+    <p class="redirect-message">Taking you to your account...</p>
+  </main>
+  <!-- This script adds the person's name and starts the short wait. -->
+  <script type="module" src="Welcome.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Set the page name, phone layout, and about-page styles. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About CertiLock</title>
+  <link rel="stylesheet" href="About.css">
+</head>
+<body>
+  <!-- Keep the logo, home link, and sign-out button together at the top. -->
+  <header class="topbar">
+    <img class="brand-logo" src="image/certilock logo.jpeg" alt="CertiLock — certificate security and verification">
+    <nav class="topbar-actions" aria-label="Page navigation">
+      <a class="secondary-button" href="index.html">Home</a>
+      <button id="logout-btn" class="secondary-button" type="button">Log out</button>
+    </nav>
+  </header>
+
+  <!-- Explain what CertiLock does and which courses it supports. -->
+  <main>
+    <p class="eyebrow">ABOUT CERTILOCK</p>
+    <h1>Secure your certificate process.</h1>
+    <p class="intro">CertiLock helps learners create a clear, consistent certificate of clearance for their course work. Register and log in with your own account, provide your certificate details, and download a PDF for your records.</p>
+
+    <!-- Show how certificates are made and the one-per-account rule. -->
+    <section class="card">
+      <h2>Courses</h2>
+      <p>Certificates are available for Backend Development, Frontend Development, Cybersecurity, UI/UX Design, and Data Analysis.</p>
+    </section>
+
+    <section class="card">
+      <h2>How it works</h2>
+      <ol>
+        <li>Enter your name, registration number, email, course, purpose, and date.</li>
+        <li>Generate and download your certificate as a PDF.</li>
+        <li>Each account can create one certificate. Once created, its details cannot be changed.</li>
+      </ol>
+    </section>
+
+    <!-- The script fills in this status and shows the certificate button. -->
+    <p id="certificate-status" class="status" role="status" aria-live="polite">Checking your account...</p>
+    <a id="generate-link" class="primary-link" href="GenerateCert.html" hidden>Click here if you want to generate a certificate</a>
+  </main>
+  <!-- This script checks the account and handles signing out. -->
+  <script type="module" src="About.js"></script>
+</body>
+</html>

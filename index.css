@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap');
+
+/* Make the welcome heading easy to read and keep it in the middle. */
+.center{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e8eaf0;
+  background-color: #151a2b;
+  font-size: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  padding: 40px 60px;
+  border-radius: 16px;
+  border: 1px solid #232a45;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  letter-spacing: -0.5px;
+}
+
+/* Keep the logo neat and small enough for phone screens. */
+.brand-logo {
+  display: block;
+  width: min(260px, 70vw);
+  height: auto;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
+/* Put the welcome page content in a tidy column on a dark background. */
+body {
+  background-color: #0a0e1a;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Count padding and borders inside each element's size. */
+* {
+  box-sizing: border-box;
+}
+
+/* Style the short sentence under the welcome heading. */
+.subtitle {
+  font-size: 16px;
+  color: #aab0c0;
+  margin: 12px 0 0;
+  text-align: center;
+  font-weight: 400;
+  font-family: 'JetBrains Mono', monospace; 
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+/* Make the sign-up link look like a button. */
+.start-link {
+  margin-top: 24px;
+  padding: 14px 22px;
+  border-radius: 10px;
+  background: #4f5bd5;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Darken the button a little when the mouse is over it. */
+.start-link:hover {
+  background: #3f4ac0;
+}

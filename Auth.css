@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Let padding and borders fit inside each element's size. */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Center the sign-up form and set the page colors and font. */
+body {
+  background-color: #0a0e1a;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #e8eaf0;
+}
+
+/* Keep the logo a comfortable size on both large and small screens. */
+.brand-logo {
+  display: block;
+  width: min(180px, 60vw);
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+/* Make the page heading stand out above the form. */
+.center {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #ffffff;
+  letter-spacing: -1px;
+}
+
+/* Use the accent color for any highlighted heading words. */
+.center span {
+  color: #4f7cff;
+}
+
+/* Give the form a dark card so the fields are easy to see. */
+form {
+  background-color: #151a2b;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #232a45;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* Make field names clear and easy to read. */
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #aab0c0;
+}
+
+/* Make text boxes match the rest of the page. */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: #0a0e1a;
+  border: 1px solid #232a45;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: all 0.2s;
+  margin-bottom: 6px;
+}
+
+/* Highlight the field the user is typing in. */
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.15);
+}
+
+/* Make the register button wide and easy to press. */
+button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background-color: #4f7cff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.2s;
+}
+
+/* Give the button a small color change when pointed at. */
+button[type="submit"]:hover {
+  background-color: #3a63e0;
+  transform: translateY(-1px);
+}
+
+/* Style the link to the sign-in page. */
+.form-link {
+  margin-top: 18px;
+  color: #aab0c0;
+  font-size: 14px;
+}
+
+/* Make the sign-in link easy to spot. */
+.form-link a {
+  color: #8d9cff;
+}
+
+/* Show that the form is busy while a request is running. */
+button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}

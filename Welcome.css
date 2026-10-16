@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Make padding and borders part of each element's size. */
+* {
+  box-sizing: border-box;
+}
+
+/* Put the welcome card in the middle of the screen. */
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: #0a0e1a;
+  color: #e8eaf0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Draw the dark card around the greeting. */
+.welcome-card {
+  width: min(100%, 560px);
+  padding: 40px 28px;
+  text-align: center;
+  background: #151a2b;
+  border: 1px solid #232a45;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Show the logo above the greeting. */
+.brand-logo {
+  display: block;
+  width: min(220px, 70vw);
+  height: auto;
+  margin: 0 auto 28px;
+  border-radius: 10px;
+}
+
+/* Style the small sign-in message above the main greeting. */
+.eyebrow {
+  margin: 0 0 10px;
+  color: #8d9cff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* Make the welcome greeting large and readable. */
+h1 {
+  margin: 0;
+  font-size: clamp(28px, 6vw, 40px);
+  letter-spacing: -1px;
+}
+
+/* Explain that the next page will open soon. */
+.redirect-message {
+  margin: 18px 0 0;
+  color: #aab0c0;
+  line-height: 1.6;
+}

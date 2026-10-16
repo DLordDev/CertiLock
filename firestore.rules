@@ -1,0 +1,63 @@
+// These rules decide who can look at or save each kind of record.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Keep each person's certificate in a record named after their account.
+    match /certificates/{userId} {
+      // A person may only read their own certificate.
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // Allow one valid certificate to be created, but never changed or removed.
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && !exists(/databases/$(database)/documents/certificates/$(userId))
+        && request.resource.data.keys().hasAll([
+          'uid', 'fullName', 'registrationNumber', 'email', 'course',
+          'purpose', 'date', 'certificateId', 'fingerprint', 'createdAt'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'uid', 'fullName', 'registrationNumber', 'email', 'course',
+          'purpose', 'date', 'certificateId', 'fingerprint', 'createdAt'
+        ])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() > 0
+        && request.resource.data.fullName.size() <= 120
+        && request.resource.data.registrationNumber is string
+        && request.resource.data.registrationNumber.size() > 0
+        && request.resource.data.registrationNumber.size() <= 60
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.course in [
+          'Backend Development', 'Frontend Development', 'Cybersecurity',
+          'UI/UX Design', 'Data Analysis'
+        ]
+        && request.resource.data.purpose is string
+        && request.resource.data.purpose.size() > 0
+        && request.resource.data.purpose.size() <= 240
+        && request.resource.data.date is string
+        && request.resource.data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.certificateId is string
+        && request.resource.data.certificateId.size() <= 50
+        && request.resource.data.fingerprint is string
+        && request.resource.data.fingerprint.matches('^[a-f0-9]{64}$')
+        && request.resource.data.createdAt == request.time
+        && !exists(/databases/$(database)/documents/certificateFingerprints/$(request.resource.data.fingerprint))
+        && getAfter(/databases/$(database)/documents/certificateFingerprints/$(request.resource.data.fingerprint)).data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // Keep a small private marker so matching certificate details cannot be reused.
+    match /certificateFingerprints/{fingerprint} {
+      // A marker may only be added together with its matching certificate.
+      allow create: if request.auth != null
+        && !exists(/databases/$(database)/documents/certificateFingerprints/$(fingerprint))
+        && request.resource.data.keys().hasAll(['createdAt'])
+        && request.resource.data.keys().hasOnly(['createdAt'])
+        && request.resource.data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/certificates/$(request.auth.uid)).data.uid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/certificates/$(request.auth.uid)).data.fingerprint == fingerprint;
+      // Signed-in users can check one marker, but nobody can change or list markers.
+      allow get: if request.auth != null;
+      allow list, update, delete: if false;
+    }
+  }
+}

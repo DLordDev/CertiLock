@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Set the page name, phone layout, PDF tool, and form styles. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Certificate - Certilock</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="GenerateCert.css">
+</head>
+<body>
+
+<!-- Show the logo and tell the user what this form will make. -->
+<img class="brand-logo" src="image/certilock logo.jpeg" alt="CertiLock — certificate security and verification">
+<h2>Generate Certificate</h2>
+
+<!-- Collect the details that will be written on the certificate. -->
+<form id="certForm">
+  <input type="text" id="fullname" placeholder="Full Name" maxlength="120" required>
+  <input type="text" id="RegistrationNumber" placeholder="Registration Number e.g Rg123456" maxlength="60" required>
+  <label for="email">Account email:</label>
+  <input type="email" id="email" placeholder="Email" autocomplete="email" readonly required>
+  <select id="course" required>
+    <option selected disabled>Select Course</option>
+    <option>Backend Development</option>
+    <option>Frontend Development</option>
+    <option>Cybersecurity</option>
+    <option>UI/UX Design</option>
+    <option>Data Analysis</option>
+  </select>
+  <input type="text" id="purpose" placeholder="Purpose e.g Final Year Clearance" maxlength="240" required>
+  <input type="date" id="date" required>
+  <button type="submit">Generate Certificate</button>
+</form>
+
+<!-- This area can show certificate details if a preview is added. -->
+<div id="preview" style="display:none">
+  <h3>CERTIFICATE PREVIEW</h3>
+  <p id="p_name"></p>
+  <p id="p_matric"></p>
+  <p id="p_course"></p>
+</div>
+
+<!-- This script checks the account, saves the certificate, and makes its PDF. -->
+<script type="module" src="GenerateCert.js"></script>
+</body>
+</html>

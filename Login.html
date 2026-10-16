@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Set the page name, phone layout, and shared account styles. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in - CertiLock</title>
+  <link rel="stylesheet" href="Auth.css">
+</head>
+<body>
+  <!-- Show the logo and sign-in form. -->
+  <img class="brand-logo" src="image/certilock logo.jpeg" alt="CertiLock — certificate security and verification">
+  <h1 class="center">Log in to CertiLock</h1>
+  <form id="login-form">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" autocomplete="email" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+    <button type="submit" id="login-btn">Log in</button>
+  </form>
+  <!-- Give new visitors a link to sign up. -->
+  <p class="form-link">New to CertiLock? <a href="Auth.html">Create an account</a></p>
+  <!-- This script checks the sign-in details with Firebase. -->
+  <script type="module" src="Login.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Make padding and borders fit inside each element's size. */
+* {
+  box-sizing: border-box;
+}
+
+/* Set the page's background, text, and space around the edges. */
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  background: #0a0e1a;
+  color: #e8eaf0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Put the logo and page buttons on one line. */
+.topbar {
+  width: min(100%, 900px);
+  margin: 0 auto 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Keep the logo small in the top bar. */
+.brand-logo {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Leave a small gap between the home and sign-out buttons. */
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Keep the main words and cards together in the center. */
+main {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+/* Style the small label above the page heading. */
+.eyebrow {
+  color: #8d9cff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* Make the main heading clear and easy to read. */
+h1 {
+  margin: 8px 0 16px;
+  font-size: clamp(32px, 7vw, 48px);
+  letter-spacing: -1.5px;
+}
+
+/* Use softer text for the page details. */
+.intro,
+.card p,
+.card li,
+.status {
+  color: #aab0c0;
+  line-height: 1.7;
+}
+
+/* Give the opening explanation a little extra size. */
+.intro {
+  margin-bottom: 28px;
+  font-size: 17px;
+}
+
+/* Put course and instruction text inside simple cards. */
+.card {
+  margin: 16px 0;
+  padding: 24px;
+  background: #151a2b;
+  border: 1px solid #232a45;
+  border-radius: 14px;
+}
+
+/* Make each card title easy to spot. */
+.card h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+/* Keep the last card text from having extra space below it. */
+.card p,
+.card ol {
+  margin-bottom: 0;
+}
+
+/* Indent the numbered steps so they are easy to follow. */
+.card ol {
+  padding-left: 22px;
+}
+
+/* Leave space between the account status and its button. */
+.status {
+  margin: 24px 0 12px;
+}
+
+/* Give links and buttons the same comfortable shape. */
+.primary-link,
+.secondary-button {
+  display: inline-block;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Make the certificate button use the main accent color. */
+.primary-link {
+  background: #4f5bd5;
+  color: #fff;
+}
+
+/* Darken the certificate button when the mouse is over it. */
+.primary-link:hover {
+  background: #3f4ac0;
+}
+
+/* Make the home and sign-out buttons quieter than the main button. */
+.secondary-button {
+  background: #151a2b;
+  border: 1px solid #232a45;
+  color: #e8eaf0;
+}
+
+/* Keep items marked hidden out of sight. */
+[hidden] {
+  display: none !important;
+}
+
+/* Fit the top bar and cards on narrow phone screens. */
+@media (max-width: 520px) {
+  body {
+    padding: 18px;
+  }
+
+  .topbar {
+    margin-bottom: 28px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}

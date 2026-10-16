@@ -6,6 +6,7 @@ import { auth, db } from "./firebase.js";
 // Find the status words, certificate button, and sign-out button.
 const status = document.querySelector("#certificate-status");
 const generateLink = document.querySelector("#generate-link");
+const editLink = document.querySelector("#edit-link");
 const logoutButton = document.querySelector("#logout-btn");
 
 // Check the account whenever Firebase tells us who is signed in.
@@ -16,26 +17,26 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Let the signed-in person open the form while we check their record.
-  generateLink.hidden = false;
-
   try {
     // Look for a certificate saved under this person's account.
     const certificate = await getDoc(doc(db, "certificates", user.uid));
     if (certificate.exists()) {
-      // Tell them their certificate is already made and locked.
-      status.textContent = "You have already generated your certificate. Its details are locked and cannot be changed.";
+      const savedData = certificate.data();
+      const edited = savedData.hasEdited === true || (savedData.editCount || 0) >= 1;
+      status.textContent = edited
+        ? "You have already generated and edited your certificate. Further online edits are not available."
+        : "You have already generated your certificate. You may edit it once; your registration number and email will stay locked.";
+      editLink.hidden = edited;
       return;
     }
 
     // Tell a person with no saved certificate that they can make one.
     status.textContent = `Welcome${user.displayName ? `, ${user.displayName}` : ""}. Logged in as ${user.email}. You can generate one certificate for this account.`;
+    generateLink.hidden = false;
   } catch (error) {
-    // Show the problem but leave the certificate button available.
+    // Do not offer a create or edit action when the existing record cannot be checked.
     console.error("Could not load certificate status:", error);
-    const errorDetails = 
-    [error.code, error.message].filter(Boolean).join(": ");
-    status.textContent = `We could not check your certificate status${errorDetails ? ` (${errorDetails})` : ""}. You can still continue, but certificate generation will be allowed only if this account has not already created one.`;
+    status.textContent = "We could not check your certificate status. Please refresh the page or contact support.";
   }
 });
 

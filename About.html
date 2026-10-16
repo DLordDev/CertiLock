@@ -34,13 +34,14 @@
       <ol>
         <li>Enter your name, registration number, email, course, purpose, and date.</li>
         <li>Generate and download your certificate as a PDF.</li>
-        <li>Each account can create one certificate. Once created, its details cannot be changed.</li>
+        <li>Each account can create one certificate and edit it once online. Registration number and email stay locked.</li>
       </ol>
     </section>
 
     <!-- The script fills in this status and shows the certificate button. -->
     <p id="certificate-status" class="status" role="status" aria-live="polite">Checking your account...</p>
     <a id="generate-link" class="primary-link" href="GenerateCert.html" hidden>Click here if you want to generate a certificate</a>
+    <a id="edit-link" class="primary-link" href="GenerateCert.html?edit=1" hidden>Did you make a mistake in your receipt? Click here to edit</a>
   </main>
   <!-- This script checks the account and handles signing out. -->
   <script type="module" src="About.js"></script>

@@ -108,7 +108,8 @@ button:disabled {
 }
 
 /* Make the account email look read-only because it comes from sign-in. */
-input[readonly] {
+input[readonly],
+input:disabled {
   color: #aab0c0;
   cursor: not-allowed;
 }

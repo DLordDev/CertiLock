@@ -21,7 +21,8 @@ current browser-only Firebase setup.
   and, where practical, the deployed website's allowed referrers.
 - Protect data with Firebase Authentication and restrictive Firestore Security
   Rules. The rules in `firestore.rules` require a signed-in user and constrain
-  certificate reads and writes.
+  certificate reads and writes. They also permit only one owner-only certificate
+  edit, keep the registration number and email immutable, and block later edits.
 - Never put a service-account key or other server-side credential in browser
   code or commit it. If server-side access is added later, store credentials in
   a server-side secret manager or protected environment configuration.

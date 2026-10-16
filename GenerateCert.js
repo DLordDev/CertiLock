@@ -1,35 +1,78 @@
-// Bring in sign-in and safe-saving tools from Firebase.
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-import { doc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { doc, getDoc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 import { auth, db } from "./firebase.js";
 
-// Find the form, its button, and the email box.
 const form = document.querySelector("#certForm");
 const submitButton = form.querySelector('button[type="submit"]');
+const nameInput = document.querySelector("#fullname");
+const registrationInput = document.querySelector("#RegistrationNumber");
 const emailInput = document.querySelector("#email");
+const courseInput = document.querySelector("#course");
+const purposeInput = document.querySelector("#purpose");
+const dateInput = document.querySelector("#date");
+const formTitle = document.querySelector("#form-title");
+const editMode = new URLSearchParams(window.location.search).get("edit") === "1";
+const editLimitMessage = "You have already edited your receipt once. You cannot edit it again online. Kindly go to the office to solve this problem. If you have any issues, please contact support.";
+
 let currentUser = null;
+let existingCertificate = null;
 let accountReady = false;
 
-// Wait for Firebase to tell us which person is signed in.
+function showEditLimit() {
+  alert(`Edit Limit Reached\n\n${editLimitMessage}`);
+  window.location.replace("About.html");
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // Send signed-out visitors to the sign-in page.
     window.location.replace("Login.html");
     return;
   }
 
-  // Remember the account and fill in its email.
   currentUser = user;
   emailInput.value = user.email || "";
+
+  if (editMode) {
+    const certificateRef = doc(db, "certificates", user.uid);
+    try {
+      const savedCertificate = await getDoc(certificateRef);
+      if (!savedCertificate.exists()) {
+        alert("No receipt was found for your account to edit.");
+        window.location.replace("About.html");
+        return;
+      }
+
+      existingCertificate = savedCertificate.data();
+      if ((existingCertificate.editCount || 0) >= 1 || existingCertificate.hasEdited === true) {
+        showEditLimit();
+        return;
+      }
+
+      nameInput.value = existingCertificate.fullName || "";
+      registrationInput.value = existingCertificate.registrationNumber || "";
+      registrationInput.disabled = true;
+      emailInput.value = existingCertificate.email || "";
+      emailInput.disabled = true;
+      courseInput.value = existingCertificate.course || "";
+      purposeInput.value = existingCertificate.purpose || "";
+      dateInput.value = existingCertificate.date || "";
+      formTitle.textContent = "Edit Receipt";
+      submitButton.textContent = "Generate Updated Receipt";
+    } catch (error) {
+      console.error("Could not load the receipt for editing:", error);
+      alert("We could not load your receipt for editing. Please try again.");
+      window.location.replace("About.html");
+      return;
+    }
+  }
+
   accountReady = true;
 });
 
-// Make text look the same even if someone uses different capital letters.
 function normalize(value) {
   return value.trim().normalize("NFKC").toLocaleLowerCase("en-US");
 }
 
-// Turn certificate details into a short code for finding matching certificates.
 async function makeFingerprint(certificate) {
   const fields = [
     certificate.fullName,
@@ -42,7 +85,6 @@ async function makeFingerprint(certificate) {
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-// Put the certificate details onto a downloadable PDF page.
 function makePdf(certificate) {
   if (!window.jspdf?.jsPDF) {
     throw new Error("The certificate PDF service did not load. Please refresh and try again.");
@@ -65,7 +107,6 @@ function makePdf(certificate) {
     `Certificate ID: ${certificate.certificateId}`
   ];
   let y = 60;
-  // Split long details onto new lines so they fit on the page.
   for (const detail of details) {
     const lines = pdf.splitTextToSize(detail, 170);
     pdf.text(lines, 20, y);
@@ -75,54 +116,86 @@ function makePdf(certificate) {
   return pdf;
 }
 
-// Save the certificate when the user sends the form.
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  // Wait until Firebase has confirmed who is signed in.
   if (!accountReady || !currentUser) {
     alert("Please wait while we verify your account, then try again.");
     return;
   }
 
-  // Let the browser point out any fields that were left blank.
   if (!form.reportValidity()) {
     return;
   }
 
   submitButton.disabled = true;
-  // Gather the form details and add account information from Firebase.
   const certificate = {
     uid: currentUser.uid,
-    fullName: document.querySelector("#fullname").value.trim(),
-    registrationNumber: document.querySelector("#RegistrationNumber").value.trim(),
-    email: currentUser.email || "",
-    course: document.querySelector("#course").value,
-    purpose: document.querySelector("#purpose").value.trim(),
-    date: document.querySelector("#date").value,
+    fullName: nameInput.value.trim(),
+    registrationNumber: editMode ? existingCertificate.registrationNumber : registrationInput.value.trim(),
+    email: editMode ? existingCertificate.email : currentUser.email || "",
+    course: courseInput.value,
+    purpose: purposeInput.value.trim(),
+    date: dateInput.value,
     certificateId: `CERT-${crypto.randomUUID().toUpperCase()}`
   };
 
   try {
-    // Do not allow blank details or an account without an email.
     if (!certificate.fullName || !certificate.registrationNumber || !certificate.purpose) {
       throw new Error("Please enter a name, registration number, and purpose without leaving them blank.");
     }
-
     if (!certificate.email) {
       throw new Error("Your account does not have an email address. Please log in with a valid account.");
     }
 
-    // Make matching text into a code, then prepare the two saved record locations.
     const fingerprint = await makeFingerprint(certificate);
     const certificateRef = doc(db, "certificates", currentUser.uid);
     const fingerprintRef = doc(db, "certificateFingerprints", fingerprint);
     const pdf = makePdf(certificate);
 
-    // Save both records together so neither can be saved without the other.
     await runTransaction(db, async (transaction) => {
-      const existingCertificate = await transaction.get(certificateRef);
-      if (existingCertificate.exists()) {
-        // One account can only create one certificate.
+      const savedCertificate = await transaction.get(certificateRef);
+
+      if (editMode) {
+        if (!savedCertificate.exists()) {
+          throw new Error("No receipt was found for your account to edit.");
+        }
+
+        const savedData = savedCertificate.data();
+        if ((savedData.editCount || 0) >= 1 || savedData.hasEdited === true) {
+          const error = new Error(editLimitMessage);
+          error.code = "receipt/edit-limit-reached";
+          throw error;
+        }
+        if (savedData.uid !== currentUser.uid) {
+          throw new Error("You are not allowed to edit this receipt.");
+        }
+
+        const updatedCertificate = {
+          ...certificate,
+          registrationNumber: savedData.registrationNumber,
+          email: savedData.email,
+          fingerprint,
+          createdAt: savedData.createdAt,
+          editCount: 1,
+          hasEdited: true,
+          updatedAt: serverTimestamp()
+        };
+
+        if (fingerprint !== savedData.fingerprint) {
+          const duplicate = await transaction.get(fingerprintRef);
+          if (duplicate.exists()) {
+            const error = new Error("A certificate with the same details already exists.");
+            error.code = "certificate/duplicate-details";
+            throw error;
+          }
+          transaction.set(fingerprintRef, { createdAt: serverTimestamp() });
+        }
+
+        transaction.update(certificateRef, updatedCertificate);
+        return;
+      }
+
+      if (savedCertificate.exists()) {
         const error = new Error("You have already created a certificate.");
         error.code = "certificate/already-exists";
         throw error;
@@ -130,41 +203,51 @@ form.addEventListener("submit", async (event) => {
 
       const duplicate = await transaction.get(fingerprintRef);
       if (duplicate.exists()) {
-        // Stop two accounts from making certificates with the same details.
         const error = new Error("A certificate with the same details already exists.");
         error.code = "certificate/duplicate-details";
         throw error;
       }
 
-      const createdAt = serverTimestamp();
       transaction.set(certificateRef, {
         ...certificate,
         fingerprint,
-        createdAt
+        editCount: 0,
+        hasEdited: false,
+        createdAt: serverTimestamp()
       });
-      transaction.set(fingerprintRef, {
-        createdAt
-      });
+      transaction.set(fingerprintRef, { createdAt: serverTimestamp() });
     });
 
-    // Download the finished PDF and return to the about page.
     pdf.save(`${certificate.fullName}_certificate.pdf`);
-    alert("You have successfully generated your certificate.");
+    alert(editMode ? "You have successfully updated your receipt." : "You have successfully generated your certificate.");
     window.location.replace("About.html");
   } catch (error) {
-    // Show a clear message for a used account, duplicate details, or another problem.
-    console.error("Certificate generation failed:", error);
-    if (error.code === "certificate/already-exists") {
-      alert("Sorry, you cannot do that. You have already created a certificate, and its details cannot be changed.");
+    console.error(editMode ? "Receipt update failed:" : "Certificate generation failed:", error);
+
+    if (error.code === "receipt/edit-limit-reached") {
+      showEditLimit();
+    } else if (editMode && error.code === "permission-denied") {
+      try {
+        const latestCertificate = await getDoc(doc(db, "certificates", currentUser.uid));
+        const latestData = latestCertificate.data();
+        if (latestData && ((latestData.editCount || 0) >= 1 || latestData.hasEdited === true)) {
+          showEditLimit();
+          return;
+        }
+      } catch (statusError) {
+        console.error("Could not verify the receipt edit limit:", statusError);
+      }
+      alert("We could not update your receipt because the change was not allowed. Please try again or contact support.");
+    } else if (error.code === "certificate/already-exists") {
+      alert("Sorry, you cannot generate another certificate for this account.");
       window.location.replace("About.html");
     } else if (error.code === "certificate/duplicate-details") {
       alert("Sorry, a certificate with the same details already exists.");
     } else {
       const errorDetails = [error.code, error.message].filter(Boolean).join(": ");
-      alert(`We could not generate your certificate. Your details have not been saved.${errorDetails ? `\n\nFirebase error: ${errorDetails}` : "\n\nCheck the browser console for details."}`);
+      alert(`We could not ${editMode ? "update your receipt" : "generate your certificate"}. Your details have not been saved.${errorDetails ? `\n\nFirebase error: ${errorDetails}` : "\n\nCheck the browser console for details."}`);
     }
   } finally {
-    // Let the user press the button again if saving did not work.
     submitButton.disabled = false;
   }
 });

@@ -8,6 +8,15 @@ const status = document.querySelector("#certificate-status");
 const generateLink = document.querySelector("#generate-link");
 const editLink = document.querySelector("#edit-link");
 const logoutButton = document.querySelector("#logout-btn");
+const navToggle = document.querySelector("#nav-toggle");
+const navigation = document.querySelector("#topbar-actions");
+
+navToggle.addEventListener("click", () => {
+  const expanded = navToggle.getAttribute("aria-expanded") === "true";
+  navToggle.setAttribute("aria-expanded", String(!expanded));
+  navToggle.setAttribute("aria-label", expanded ? "Open navigation menu" : "Close navigation menu");
+  navigation.classList.toggle("is-open", !expanded);
+});
 
 // Check the account whenever Firebase tells us who is signed in.
 onAuthStateChanged(auth, async (user) => {

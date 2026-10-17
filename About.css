@@ -5,20 +5,26 @@
   box-sizing: border-box;
 }
 
+html {
+  min-width: 320px;
+  background: #0a0e1a;
+}
+
 /* Set the page's background, text, and space around the edges. */
 body {
   min-height: 100vh;
   margin: 0;
-  padding: 24px;
+  padding: clamp(12px, 4vw, 24px);
   background: #0a0e1a;
   color: #e8eaf0;
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
 /* Put the logo and page buttons on one line. */
 .topbar {
   width: min(100%, 900px);
-  margin: 0 auto 40px;
+  margin: 0 auto clamp(24px, 5vw, 40px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -26,7 +32,8 @@ body {
 
 /* Keep the logo small in the top bar. */
 .brand-logo {
-  width: 120px;
+  width: min(120px, 28vw);
+  max-width: 100%;
   height: auto;
   border-radius: 8px;
 }
@@ -41,6 +48,7 @@ body {
 /* Keep the main words and cards together in the center. */
 main {
   width: min(100%, 760px);
+  min-width: 0;
   margin: 0 auto;
 }
 
@@ -55,8 +63,9 @@ main {
 /* Make the main heading clear and easy to read. */
 h1 {
   margin: 8px 0 16px;
-  font-size: clamp(32px, 7vw, 48px);
+  font-size: clamp(1.8rem, 7vw, 3rem);
   letter-spacing: -1.5px;
+  overflow-wrap: anywhere;
 }
 
 /* Use softer text for the page details. */
@@ -70,14 +79,15 @@ h1 {
 
 /* Give the opening explanation a little extra size. */
 .intro {
-  margin-bottom: 28px;
-  font-size: 17px;
+  margin-bottom: clamp(18px, 4vw, 28px);
+  font-size: clamp(1rem, 3vw, 1.0625rem);
+  overflow-wrap: anywhere;
 }
 
 /* Put course and instruction text inside simple cards. */
 .card {
-  margin: 16px 0;
-  padding: 24px;
+  margin: clamp(12px, 3vw, 16px) 0;
+  padding: clamp(16px, 4vw, 24px);
   background: #151a2b;
   border: 1px solid #232a45;
   border-radius: 14px;
@@ -93,11 +103,12 @@ h1 {
 .card p,
 .card ol {
   margin-bottom: 0;
+  overflow-wrap: anywhere;
 }
 
 /* Indent the numbered steps so they are easy to follow. */
 .card ol {
-  padding-left: 22px;
+  padding-left: clamp(18px, 5vw, 22px);
 }
 
 /* Leave space between the account status and its button. */
@@ -109,7 +120,8 @@ h1 {
 .primary-link,
 .secondary-button {
   display: inline-block;
-  padding: 14px 18px;
+  min-height: 44px;
+  padding: 12px 18px;
   border: 0;
   border-radius: 10px;
   font: inherit;
@@ -136,6 +148,27 @@ h1 {
   color: #e8eaf0;
 }
 
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: 1px solid #232a45;
+  border-radius: 10px;
+  background: #151a2b;
+  color: #e8eaf0;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  margin: 4px auto;
+  background: currentColor;
+  border-radius: 2px;
+}
+
 /* Keep items marked hidden out of sight. */
 [hidden] {
   display: none !important;
@@ -144,14 +177,48 @@ h1 {
 /* Fit the top bar and cards on narrow phone screens. */
 @media (max-width: 520px) {
   body {
-    padding: 18px;
+    padding: 12px 16px 24px;
   }
 
   .topbar {
-    margin-bottom: 28px;
+    position: relative;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .topbar-actions {
+    display: none;
+    flex: 1 0 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+  }
+
+  .topbar-actions.is-open {
+    display: flex;
+  }
+
+  .topbar-actions a,
+  .topbar-actions button {
+    width: 100%;
+    text-align: center;
   }
 
   .card {
-    padding: 20px;
+    padding: 16px;
+  }
+
+  .status {
+    margin-top: 18px;
+  }
+
+  .primary-link {
+    width: 100%;
+    text-align: center;
   }
 }

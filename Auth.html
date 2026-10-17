@@ -14,16 +14,16 @@
   <!-- Collect the details needed to make a new account. -->
   <form id="register-form">
     <label for="firstname">First Name:</label>
-    <input type="text" id="firstname" name="firstname" required><br><br>
+    <input type="text" id="firstname" name="firstname" autocomplete="given-name" required>
 
     <label for="lastname">Last Name:</label>
-    <input type="text" id="lastname" name="lastname" required><br><br>
+    <input type="text" id="lastname" name="lastname" autocomplete="family-name" required>
 
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
+    <input type="email" id="email" name="email" autocomplete="email" required>
 
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password" minlength="8" required><br><br>
+    <input type="password" id="password" name="password" minlength="8" autocomplete="new-password" required>
 
     <button type="submit" id="submit-btn">Register</button>
   </form>

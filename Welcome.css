@@ -5,11 +5,17 @@
   box-sizing: border-box;
 }
 
+html {
+  min-width: 320px;
+  background: #0a0e1a;
+}
+
 /* Put the welcome card in the middle of the screen. */
 body {
   min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
-  padding: 24px;
+  padding: clamp(12px, 4vw, 24px);
   display: grid;
   place-items: center;
   background: #0a0e1a;
@@ -20,7 +26,8 @@ body {
 /* Draw the dark card around the greeting. */
 .welcome-card {
   width: min(100%, 560px);
-  padding: 40px 28px;
+  min-width: 0;
+  padding: clamp(22px, 6vw, 40px) clamp(16px, 5vw, 28px);
   text-align: center;
   background: #151a2b;
   border: 1px solid #232a45;
@@ -31,7 +38,8 @@ body {
 /* Show the logo above the greeting. */
 .brand-logo {
   display: block;
-  width: min(220px, 70vw);
+  width: min(220px, 70vw, 32vh);
+  max-width: 100%;
   height: auto;
   margin: 0 auto 28px;
   border-radius: 10px;
@@ -51,6 +59,7 @@ h1 {
   margin: 0;
   font-size: clamp(28px, 6vw, 40px);
   letter-spacing: -1px;
+  overflow-wrap: anywhere;
 }
 
 /* Explain that the next page will open soon. */
@@ -58,4 +67,5 @@ h1 {
   margin: 18px 0 0;
   color: #aab0c0;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }

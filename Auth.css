@@ -7,34 +7,48 @@
   padding: 0;
 }
 
-/* Center the sign-up form and set the page colors and font. */
+html {
+  min-width: 320px;
+  background-color: #0a0e1a;
+}
+
+/* Center the account form while leaving room on short screens. */
 body {
   background-color: #0a0e1a;
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0;
+  padding: 16px;
   color: #e8eaf0;
+  overflow-x: hidden;
 }
 
-/* Keep the logo a comfortable size on both large and small screens. */
+/* Keep the logo proportional and compact on short mobile screens. */
 .brand-logo {
   display: block;
-  width: min(180px, 60vw);
+  width: min(150px, 40vw, 18vh);
+  max-width: 100%;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-radius: 10px;
 }
 
 /* Make the page heading stand out above the form. */
 .center {
-  font-size: 36px;
+  width: 100%;
+  max-width: 440px;
+  font-size: clamp(1.35rem, 5vw, 2rem);
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 12px;
   color: #ffffff;
   letter-spacing: -1px;
+  text-align: center;
+  line-height: 1.2;
 }
 
 /* Use the accent color for any highlighted heading words. */
@@ -45,11 +59,13 @@ body {
 /* Give the form a dark card so the fields are easy to see. */
 form {
   background-color: #151a2b;
-  padding: 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: clamp(16px, 4vw, 24px);
   border-radius: 16px;
   border: 1px solid #232a45;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 
@@ -58,7 +74,7 @@ label {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   color: #aab0c0;
 }
 
@@ -67,7 +83,9 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
   width: 100%;
-  padding: 14px 16px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
   background-color: #0a0e1a;
   border: 1px solid #232a45;
   border-radius: 10px;
@@ -76,7 +94,7 @@ input[type="email"] {
   font-family: 'Inter', sans-serif;
   outline: none;
   transition: all 0.2s;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 /* Highlight the field the user is typing in. */
@@ -90,7 +108,8 @@ input[type="email"]:focus {
 /* Make the register button wide and easy to press. */
 button[type="submit"] {
   width: 100%;
-  padding: 14px;
+  min-height: 44px;
+  padding: 10px 14px;
   background-color: #4f7cff;
   color: white;
   border: none;
@@ -99,7 +118,7 @@ button[type="submit"] {
   font-weight: 600;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 4px;
   transition: all 0.2s;
 }
 
@@ -111,13 +130,19 @@ button[type="submit"]:hover {
 
 /* Style the link to the sign-in page. */
 .form-link {
-  margin-top: 18px;
+  max-width: 440px;
+  margin-top: 8px;
   color: #aab0c0;
   font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
 }
 
 /* Make the sign-in link easy to spot. */
 .form-link a {
+  display: inline-block;
+  min-height: 44px;
+  padding: 10px 4px;
   color: #8d9cff;
 }
 
@@ -125,4 +150,40 @@ button[type="submit"]:hover {
 button:disabled {
   cursor: wait;
   opacity: 0.7;
+}
+
+@media (max-height: 620px) {
+  body {
+    padding-block: 8px;
+  }
+
+  .brand-logo {
+    width: min(96px, 24vw);
+    margin-bottom: 6px;
+  }
+
+  .center {
+    margin-bottom: 8px;
+    font-size: clamp(1.2rem, 4vh, 1.6rem);
+  }
+
+  form {
+    padding: 12px 16px;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    min-height: 44px;
+    margin-bottom: 5px;
+    padding-block: 8px;
+  }
+
+  button[type="submit"] {
+    min-height: 44px;
+  }
+
+  .form-link {
+    margin-top: 4px;
+  }
 }

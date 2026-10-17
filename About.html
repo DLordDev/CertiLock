@@ -11,7 +11,10 @@
   <!-- Keep the logo, home link, and sign-out button together at the top. -->
   <header class="topbar">
     <img class="brand-logo" src="image/certilock logo.jpeg" alt="CertiLock — certificate security and verification">
-    <nav class="topbar-actions" aria-label="Page navigation">
+    <button id="nav-toggle" class="nav-toggle" type="button" aria-label="Open navigation menu" aria-controls="topbar-actions" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="topbar-actions" class="topbar-actions" aria-label="Page navigation">
       <a class="secondary-button" href="index.html">Home</a>
       <button id="logout-btn" class="secondary-button" type="button">Log out</button>
     </nav>
